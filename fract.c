@@ -10,16 +10,15 @@ int	main(int argc, char **argv)
 	mlx = mlx_init();
 	fract = init_fract(mlx, argv[1]);
 	mlx_hook(fract->window, 17, 0, &ft_exit, 0);
-	mlx_hook(fract->window, 2, 0, key_press, 0);
+	mlx_hook(fract->window, 2, 0, key_press, fract);
 	mlx_hook(fract->window, 4, 0, scrollwheel, fract);
-	drawrect(fract, 500);
-	mlx_put_image_to_window(fract->mlx, fract->window, fract->img->image, 0, 0);
+	drawfract(fract);
 	mlx_loop(fract->mlx);
 }
 
 void	options_print(void)
 {
-	printf("%s\n%s\n", "julia", "mandelbort");
+	printf("%s\n%s\n", "Julia", "Mandelbrot");
 	exit(0);
 }
 
@@ -31,6 +30,8 @@ t_fract	*init_fract(void *mlx, char *set)
 	fract->mlx = mlx;
 	fract->window = mlx_new_window(fract->mlx, WIDTH, HEIGHT, set);
 	fract->img = init_img(mlx);
+	fract->max_i = 50;
+	fract->k = init_complex(-0.4, 0.6);
 	fract->max = init_complex(2, 2);
 	fract->min = init_complex(-2, -2);
 	return (fract);

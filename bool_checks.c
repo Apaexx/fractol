@@ -6,9 +6,9 @@ int	ft_isset(char *str, int rec)
 	char	*set;
 
 	i = 0;
-	set = "julia";
+	set = "Julia";
 	if (rec)
-		set = "mandelbort";
+		set = "Mandelbrot";
 	while (str[i] == set[i])
 	{
 		if (!set[i])
