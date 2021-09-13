@@ -1,19 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fract.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ynejmi <ynejmi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/13 15:37:26 by ynejmi            #+#    #+#             */
+/*   Updated: 2021/09/13 15:37:27 by ynejmi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fract.h"
+
+int	ft_isset(char *str, int rec)
+{
+	int		i;
+	char	*set;
+
+	i = 0;
+	set = "Julia";
+	if (rec)
+		set = "Mandelbrot";
+	while (str[i] == set[i])
+	{
+		if (!set[i])
+			return (rec + 1);
+		i++;
+	}
+	if (!rec)
+		return (ft_isset(str, 1));
+	return (0);
+}
+
+void	start(char *set)
+{
+	void	*mlx;
+	t_fract	*fract;
+
+	mlx = mlx_init();
+	fract = init_fract(mlx, set);
+	drawfract(fract);
+	mlx_loop(fract->mlx);
+}
 
 int	main(int argc, char **argv)
 {
-	t_fract	*fract;
-	void	*mlx;
-
 	if (argc != 2 || !ft_isset(argv[1], 0))
 		options_print();
-	mlx = mlx_init();
-	fract = init_fract(mlx, argv[1]);
-	mlx_hook(fract->window, 17, 0, &ft_exit, 0);
-	mlx_hook(fract->window, 2, 0, key_press, fract);
-	mlx_hook(fract->window, 4, 0, scrollwheel, fract);
-	drawfract(fract);
-	mlx_loop(fract->mlx);
+	start(argv[1]);
 }
 
 void	options_print(void)
@@ -22,28 +56,8 @@ void	options_print(void)
 	exit(0);
 }
 
-t_fract	*init_fract(void *mlx, char *set)
+int	ft_exit(void)
 {
-	t_fract *fract;
-
-	fract = malloc(sizeof(t_fract));
-	fract->mlx = mlx;
-	fract->window = mlx_new_window(fract->mlx, WIDTH, HEIGHT, set);
-	fract->img = init_img(mlx);
-	fract->max_i = 50;
-	fract->k = init_complex(-0.4, 0.6);
-	fract->max = init_complex(2, 2);
-	fract->min = init_complex(-2, -2);
-	return (fract);
-}
-
-t_mlx	*init_img(void *mlx)
-{
-	t_mlx	*img;
-
-	img = malloc(sizeof(t_mlx));
-	img->image = mlx_new_image(mlx, WIDTH, HEIGHT);
-	img->data_addr = mlx_get_data_addr(img->image,
-		&img->bitsperpixel, &img->linesize, &img->endian);
-	return (img);
+	exit(0);
+	return (1);
 }

@@ -1,26 +1,18 @@
-SRC = fract.c bool_checks.c mlx_dependencies.c
 
-BONUS = $(SRC)
+SRC = juliamandel.c fract.c init.c input.c output.c
 
 NAME = lib.a
 
 all:	$(NAME)
 
 $(NAME) : $(SRC:.c=.o)
-	@gcc -Wall -Werror -Wextra -c $(SRC)
-	@ar -rc  lib.a $(SRC:.c=.o)
-	@ranlib lib.a
-	@gcc -g -Wall -Werror -Wextra -lmlx -framework OpenGL -framework AppKit lib.a -o fractol
-
-bonus:
-	@gcc -Wall -Werror -Wextra -c $(SRC) $(BONUS)
-	@ar -rc  lib.a $(SRC:.c=.o)
-	@ranlib lib.a
+	@gcc -Wall -Werror -Wextra -O3 -c $(SRC)
+	@gcc -g -Wall -Werror -Wextra -lmlx -framework OpenGL -framework AppKit $(SRC:.c=.o) -o fractol -O3
 
 clean:
-	rm -f $(SRC:.c=.o) $(BONUS:.c=.o) 
+	@rm -f $(SRC:.c=.o)
 
 fclean:	clean
-	rm -f fractol
+	@rm -f fractol
 
 re:		fclean all

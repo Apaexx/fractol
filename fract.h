@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fract.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ynejmi <ynejmi@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/09/13 15:37:44 by ynejmi            #+#    #+#             */
+/*   Updated: 2021/09/13 15:49:29 by ynejmi           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FRACT_H
 # define FRACT_H
 
@@ -14,7 +26,6 @@ typedef struct s_mlx {
 	char		*data_addr;
 	int			linesize;
 	int			bitsperpixel;
-	int			color;
 	int			endian;
 }				t_mlx;
 
@@ -26,34 +37,41 @@ typedef struct s_complex
 
 typedef struct s_color
 {
-	double		a;
-	double		b;
+	int8_t		channel[4];
 }				t_color;
+
+typedef int	t_shabalido;
 
 typedef struct s_fract
 {
 	t_mlx		*img;
 	void		*window;
 	void		*mlx;
+	int			color_shift;
 	t_complex	min;
 	t_complex	max;
 	t_complex	c;
 	t_complex	k;
 	t_complex	factor;
+	t_shabalido (*func)(struct s_fract	*fract);
 	int			max_i;
+	int			is_julia_fixed;
 }				t_fract;
 
-void		options_print(void);
-void		putpixel(t_mlx *img, int x, int y);
-t_fract		*init_fract(void *mlx, char *set);
-t_mlx		*init_img(void *mlx);
-void		drawfract(t_fract *fract);
-void		choose_color(t_fract *fract);
-void		itoco(int i, t_fract *fract);
-t_complex	init_complex(double a, double b);
-double		interpolate(double end, double start, double interpolation);
-int			scrollwheel(int keycode, int x, int y, t_fract *fract);
-int			key_press(int keycode, t_fract *fract);
-int			ft_exit(void);
-int			ft_isset(char *str, int rec);
+void			options_print(void);
+void			defult(t_fract *fract);
+int				mandelbrot(t_fract *fract);
+int				julia(t_fract *fract);
+void			putpixel(t_fract *fract, int x, int y, t_color color);
+t_fract			*init_fract(void *mlx, char *set);
+t_mlx			*init_img(void *mlx);
+void			drawfract(t_fract *fract);
+t_color			itoco(int i, t_fract *fract);
+t_complex		init_complex(double a, double b);
+double			interpolate(double end, double start, double interpolation);
+int				mouse_inp(int keycode, int x, int y, t_fract *fract);
+int				key_press(int keycode, t_fract *fract);
+int				julia_motion(int x, int y, t_fract *fract);
+int				ft_exit(void);
+int				ft_isset(char *str, int rec);
 #endif
